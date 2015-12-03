@@ -80,6 +80,12 @@ function getPlayers() {
   });
 }
 
+function updatePlayers() {
+    parseUpdate("players", "u0ltTbRMWT", function(success) {
+        console.log("Executing callback");
+    });
+}
+
 function parseGet(url, callback) {
       fullUrl = "https://api.parse.com/1/classes/"+url
       $.ajax({
@@ -92,10 +98,29 @@ function parseGet(url, callback) {
                     "X-Parse-REST-API-Key": "jmSIOJza3LSjvdv69laBl7AhyzD73ata9XEFWAFX"
                 },
                 type:"GET",
-                error:function(e) { alert('error: '+e);},
+                error:function(e) { alert('error: '+e);}
             }).done(function(e,status) {
                 callback(e["results"]);
             });
+  }
+
+  function parseUpdate(url, objectId, data, callback) {
+      fullUrl = "https://api.parse.com/1/classes/" + url + "/" + objectId
+      $.ajax({
+          contentType:"application/json",
+          dataType:"json",
+          url:fullUrl,
+          processData: false,
+          headers: {
+              "X-Parse-Application-Id": "HCOLmSAQu05uzLqdbKov2BKbH4ZJOhZ0wKmgjm03",
+              "X-Parse-REST-API-Key": "jmSIOJza3LSjvdv69laBl7AhyzD73ata9XEFWAFX"
+          },
+          type:"PUT",
+          data: JSON.stringify(data),
+          error:function(e) { console.log('error: '+e);}
+      }).done(function(e,status) {
+          callback(e);
+      });
   }
 
  function postJSON(url, params, callback) {
