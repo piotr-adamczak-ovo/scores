@@ -1,5 +1,3 @@
-$(function(){
-
   //parse
   //piotr.adamczak@ovoenergy.com
   //hacking123
@@ -71,10 +69,14 @@ function getPlayers() {
 
   parseGet("players", function(players) {
 
-      console.log(players);
+      var html;
+
       players.forEach(function(player) {
-        alert(player.username);
+        html = html + '<option value="'+player.objectId+'"">'+player.username+'</option>';
       });
+
+      $('#left_players').html(html);
+      $('#right_players').html(html);
   });
 }
 
@@ -111,4 +113,3 @@ function parseGet(url, callback) {
       }
     });
   }
-});
