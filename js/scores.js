@@ -9,7 +9,7 @@
 
   var firstUsername;
   var secondUsername;
-    
+
   var firstScore;
   var secondScore;
 
@@ -20,53 +20,60 @@
 
   var alreadySend = false;
 
-  $(function(){
+  $(function() {
 
-  $('#startgame').on('click', function(e){
-    e.preventDefault();
-  
-     var username = $('#playername').val();
-     getPlayers();
+      $('#startgame').on('click', function (e) {
+          e.preventDefault();
 
-  });
+          var username = $('#playername').val();
+          getPlayers();
 
-  $('#savegame').on('click', function(e){
-    e.preventDefault();
+      });
 
-      alreadySend = false;
+      $('#savegame').on('click', function (e) {
+          e.preventDefault();
 
-      firstUsername = $('#first_player-ddi').val();
-      secondUsername = $('#second_player-ddi').val();
+          alreadySend = false;
 
-      firstScore = parseInt($('#player_one_score').val(),10);
-      secondScore = parseInt($('#player_two_score').val(),10);
+          firstUsername = $('#first_player-ddi').val();
+          secondUsername = $('#second_player-ddi').val();
 
-      getPlayerWithUsername(firstUsername, function (result) {
+          firstScore = parseInt($('#player_one_score').val(), 10);
+          secondScore = parseInt($('#player_two_score').val(), 10);
 
-          if (result.length == 0) {
+          var firstPlayer = findPlayerWithUsername(firstUsername);
+          var secondPlayer = findPlayerWithUsername(secondUsername);
+
+          if (firstPlayer == null) {
               createPlayer(firstUsername, function (newUser) {
                   firstUserId = newUser.objectId;
                   updateScores();
               });
           } else {
-              firstUserId = result[0].objectId;
+              firstUserId = firstPlayer.objectId;
               updateScores();
           }
-      });
-      
-      getPlayerWithUsername(secondUsername, function(result) {
-          if (result.length == 0) {
-              createPlayer(secondUsername,function(newUser) {
+
+          if (secondPlayer == null) {
+              createPlayer(secondUsername, function (newUser) {
                   secondUserId = newUser.objectId;
                   updateScores();
               });
           } else {
-              secondUserId = result[0].objectId;
+              secondUserId = secondPlayer.objectId;
               updateScores();
           }
       });
-    });
   });
+
+  function findPlayerWithUsername(username) {
+      for (var i = 0; i < allPlayers.length; i++) {
+          if (allPlayers[i].text == username) {
+              return allPlayers[i];
+          }
+      }
+      return null;
+  }
 
   function updateScores() {
 
@@ -94,16 +101,16 @@
   $('#ghsubmitbtn').on('click', function(e){
     e.preventDefault();
     $('#ghapidata').html('<div id="loader"><img src="css/loader.gif" alt="loading..."></div>');
-    
+
     var username = $('#ghusername').val();
     var requri   = 'https://api.github.com/users/'+username;
     var repouri  = 'https://api.github.com/users/'+username+'/repos';
-    
+
     requestJSON(requri, function(json) {
       if(json.message == "Not Found" || username == '') {
         $('#ghapidata').html("<h2>No User Info Found</h2>");
       }
-      
+
       else {
         // else we have a user and we display their info
         var fullname   = json.name;
@@ -114,20 +121,20 @@
         var followersnum = json.followers;
         var followingnum = json.following;
         var reposnum     = json.public_repos;
-        
+
         if(fullname == undefined) { fullname = username; }
-        
+
         var outhtml = '<h2>'+fullname+' <span class="smallname">(@<a href="'+profileurl+'" target="_blank">'+username+'</a>)</span></h2>';
         outhtml = outhtml + '<div class="ghcontent"><div class="avi"><a href="'+profileurl+'" target="_blank"><img src="'+aviurl+'" width="80" height="80" alt="'+username+'"></a></div>';
         outhtml = outhtml + '<p>Followers: '+followersnum+' - Following: '+followingnum+'<br>Repos: '+reposnum+'</p></div>';
         outhtml = outhtml + '<div class="repolist clearfix">';
-        
+
         var repositories;
         $.getJSON(repouri, function(json){
-          repositories = json;   
-          outputPageContent();                
-        });          
-        
+          repositories = json;
+          outputPageContent();
+        });
+
         function outputPageContent() {
           if(repositories.length == 0) { outhtml = outhtml + '<p>No repos!</p></div>'; }
           else {
@@ -135,14 +142,14 @@
             $.each(repositories, function(index) {
               outhtml = outhtml + '<li><a href="'+repositories[index].html_url+'" target="_blank">'+repositories[index].name + '</a></li>';
             });
-            outhtml = outhtml + '</ul></div>'; 
+            outhtml = outhtml + '</ul></div>';
           }
           $('#ghapidata').html(outhtml);
         } // end outputPageContent()
       } // end else statement
     }); // end requestJSON Ajax call
   }); // end click event handler
-  
+
 
 function setupPlayers() {
     firstPlayer = new STComboBox();
@@ -178,7 +185,7 @@ function getPlayerWithUsername(username, callback) {
 
 function incrementValueForUserId(userId, param) {
   parsePut("players/"+userId, '{"'+param+'":{"__op":"Increment","amount":1}}', function(players) {
-      console.log(players);
+      //console.log(players);
   });
 }
 
@@ -207,8 +214,8 @@ function parseRequest(method, url,data, callback) {
       $.ajax({
                 contentType:"application/json",
                 dataType:"json",
-                url:fullUrl,    
-                data: data,     
+                url:fullUrl,
+                data: data,
                 processData:false,
                 headers: {
                     "X-Parse-Application-Id": "HCOLmSAQu05uzLqdbKov2BKbH4ZJOhZ0wKmgjm03",
@@ -223,7 +230,7 @@ function parseRequest(method, url,data, callback) {
   }
 
  function postJSON(url, params, callback) {
- 
+
     $.post( "ajax/test.html",params, function( data ) {
       $( ".result" ).html( data );
     });
