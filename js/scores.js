@@ -16,7 +16,7 @@
   var firstUserId;
   var secondUserId;
 
-  var data;
+  var allPlayers;
 
   var alreadySend = false;
 
@@ -41,11 +41,11 @@
       firstScore = parseInt($('#player_one_score').val(),10);
       secondScore = parseInt($('#player_two_score').val(),10);
 
-      getPlayerWithUsername(firstUsername, function(result) {
+      getPlayerWithUsername(firstUsername, function (result) {
 
           if (result.length == 0) {
-              createPlayer(firstUsername,function(newUser) {
-                  firstUserId = result[0].objectId;
+              createPlayer(firstUsername, function (newUser) {
+                  firstUserId = newUser.objectId;
                   updateScores();
               });
           } else {
@@ -57,7 +57,7 @@
       getPlayerWithUsername(secondUsername, function(result) {
           if (result.length == 0) {
               createPlayer(secondUsername,function(newUser) {
-                  secondUserId = result[0].objectId;
+                  secondUserId = newUser.objectId;
                   updateScores();
               });
           } else {
@@ -153,20 +153,19 @@ function getPlayers() {
 
   parseGet("players", null,function(players) {
 
-      data = [];
+      allPlayers = [];
 
       for(var i=0; i < players.length; i++) {
-        data.push({id: i, text: players[i].username, objectId: players[i].objectId});
+          allPlayers.push({id: i, text: players[i].username, objectId: players[i].objectId});
       }
 
-     firstPlayer.populateList(data);
-     secondPlayer.populateList(data);
+     firstPlayer.populateList(allPlayers);
+     secondPlayer.populateList(allPlayers);
   });
 }
 
 function createPlayer(nick, callback) {
-  parsePost("players", '{"username":"'+nick+'","wins":0, "losses":0,"draws":0}', function(players) {
-  });
+  parsePost("players", '{"username":"'+nick+'","wins":0, "losses":0,"draws":0}', callback)
 }
 
 function getPlayerWithUsername(username, callback) {
@@ -180,15 +179,19 @@ function incrementValueForUserId(userId, param) {
 }
 
 function parseGet(url, params, callback) {
-  parseRequest("GET",url, params, callback);
+  parseRequest("GET",url, params, function(result) {
+      callback(result["results"]);
+  });
 }
 
 function parsePost(url, params, callback) {
-  parseRequest("POST", url, params,callback);
+  parseRequest("POST", url, params, callback);
 }
 
 function parsePut(url, params, callback) {
-  parseRequest("PUT", url, params,callback);
+  parseRequest("PUT", url, params, function(result) {
+      callback(result["results"]);
+  });
 }
 
 function parseRequest(method, url,data, callback) {
@@ -207,7 +210,7 @@ function parseRequest(method, url,data, callback) {
                 type:method,
                 error:function(e) { alert('error: '+e);},
             }).done(function(e,status) {
-                callback(e["results"]);
+                callback(e);
             });
   }
 
