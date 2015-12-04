@@ -76,6 +76,7 @@
       var text;
       var imageUrl;
       var scoreDiff = player1Score - player2Score;
+      var random = Math.random() * 9;
 
       if (scoreDiff < 2) {
           text = player2Name + " slips to a " + player2Score + " - " + player1Score + " defeat to "  + player1Name;
@@ -83,15 +84,22 @@
       } else if (scoreDiff >= 3) {
           text = player1Name + " destroys " + player2Name + " " + player1Score + " - " + player2Score + "!";
 
-          var random = Math.random() * 9;
-          if (random <= 4) {
+          if (random <= 2) {
               imageUrl = "http://freetimehub.com/wp-content/uploads/arsene-wenger-meme.jpg"
+          } else if (random <= 5) {
+              imageUrl = "http://memecrunch.com/meme/C2QE/ibrahimovic/image.jpg"
           } else {
               imageUrl = "http://cdn.playbuzz.com/cdn/36d85f67-160a-4ff3-a57e-0bface5c1409/c730f429-1656-49c5-8e3c-fc6fa72d02d5.gif"
           }
       } else if (scoreDiff >= 2) {
           text = player1Name + " smashes " + player2Name + " " + player1Score + " - " + player2Score + "!";
-          imageUrl = "http://cdn.playbuzz.com/cdn/36d85f67-160a-4ff3-a57e-0bface5c1409/68273934-459b-4593-9103-b7c27d522fb4.gif"
+          if (random <= 2) {
+              imageUrl = "http://cdn.playbuzz.com/cdn/36d85f67-160a-4ff3-a57e-0bface5c1409/68273934-459b-4593-9103-b7c27d522fb4.gif"
+          } else if (random <= 5) {
+              imageUrl = "http://i1.liverpoolecho.co.uk/incoming/article10194218.ece/ALTERNATES/s510b/CS73354748.jpg"
+          } else {
+              imageUrl = "http://media.ifunny.com/results/2013/04/04/dvs9x8mf8n.jpg"
+          }
       }
 
       if (scoreDiff == 0 && ((player1Score + player2Score) <= 2)) {
