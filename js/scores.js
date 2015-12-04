@@ -63,8 +63,43 @@
               secondUserId = secondPlayer.objectId;
               updateScores();
           }
+
+          postResultOnSlack(firstUsername, secondUsername, firstScore, secondScore);
       });
   });
+
+  function postResultOnSlack(player1Name, player2Name, player1Score, player2Score) {
+      $.post('https://hooks.slack.com/services/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', JSON.stringify(getSlackResultMessage(player1Name, player2Name, player1Score, player2Score)));
+  }
+
+  function getSlackResultMessage(player1Name, player2Name, player1Score, player2Score) {
+      var text;
+      var imageUrl;
+      var scoreDiff = player1Score - player2Score;
+
+      if (scoreDiff < 2) {
+          text = player2Name + " slips to a " + player2Score + " - " + player1Score + " defeat to "  + player1Name;
+          imageUrl = "http://i.imgur.com/HUpGkU6.jpg?1"
+      } else if (scoreDiff >= 3) {
+          text = player1Name + " destroys " + player2Name + " " + player1Score + " - " + player2Score + "!";
+          imageUrl = "http://cdn.playbuzz.com/cdn/36d85f67-160a-4ff3-a57e-0bface5c1409/c730f429-1656-49c5-8e3c-fc6fa72d02d5.gif"
+      } else if (scoreDiff >= 2) {
+          text = player1Name + " smashes " + player2Name + " " + player1Score + " - " + player2Score + "!";
+          imageUrl = "http://cdn.playbuzz.com/cdn/36d85f67-160a-4ff3-a57e-0bface5c1409/68273934-459b-4593-9103-b7c27d522fb4.gif"
+      }
+      
+      if (scoreDiff == 0 && ((player1Score + player2Score) <= 2)) {
+          text = "Full time after a tightly fought contest between " + player1Name + " and " + player2Name + ". " + player1Score + " - " + player2Score;
+          imageUrl = "http://plmemes.com/images/09e87a49-0a6e-4441-aeeb-2cceaa32b82b.jpg"
+      }
+
+      return {
+          "text": text,
+          "attachments": [{
+              "image_url" : imageUrl
+          }]
+      };
+  }
 
   function findPlayerWithUsername(username) {
       for (var i = 0; i < allPlayers.length; i++) {
