@@ -314,7 +314,7 @@ function parseRequest(method, url,data, callback) {
                     "Content-Type" : "application/json" ,
                 },
                 type:method,
-                error:function(e) { alert('error: '+e);},
+                error:function(e) { },
             }).done(function(e,status) {
                 callback(e);
             });
