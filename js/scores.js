@@ -146,12 +146,15 @@
         alreadySend = true;
 
         if (firstScore == secondScore) {
+
           incrementValueForUserId(firstUserId,"draws");
           incrementValueForUserId(secondUserId,"draws");
         } else if (firstScore > secondScore) {
+
           incrementValueForUserId(firstUserId,"wins");
           incrementValueForUserId(secondUserId,"losses");
         } else {
+
           incrementValueForUserId(firstUserId,"losses");
           incrementValueForUserId(secondUserId,"wins");
         }
@@ -159,6 +162,12 @@
         saveGame(function(result) {
            console.log(result);
         });
+
+        setTimeout(function () {
+             window.location.href = "hall-of-fame.html"; //will redirect to your blog page (an ex: blog.html)
+          }, 500); //will call the function after 2 secs.
+
+
     }
   }
 
