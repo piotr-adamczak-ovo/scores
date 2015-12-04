@@ -12,6 +12,7 @@ Then I will see the player name
 And I will see the avatar
 And I will see their game stats
 And I will see the result of the last game that they played
+And I will see an option to compare results
 
 Viewing game stats
 Given a player has been set up
