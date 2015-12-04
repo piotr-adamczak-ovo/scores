@@ -147,6 +147,7 @@ a:hover {
 }
 
 #results {
+  margin-top: 10px;
     height: 500px;
     width: 80%;
     margin: 0 auto;
@@ -175,6 +176,18 @@ a:hover {
     overflow:auto;
     width: 100%;
     color: #9a9cb5;
+}
+
+#header {
+    background-image: url('../img/head.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100%;
+    color: #123;
+    text-align: left;
+    padding-left: 20px;
+    height: 60px;
+    font-size: 24px;
 }
 
 #hall-of-fame tr {
