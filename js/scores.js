@@ -4,7 +4,6 @@
 
   //3fylp3uAd1wEzLRFcli2X1lo2iizN5LX7nwRJZaz
 
-
   var firstPlayer;
   var secondPlayer;
 
@@ -16,6 +15,8 @@
 
   var firstUserId;
   var secondUserId;
+
+  var data;
 
   var alreadySend = false;
 
@@ -152,7 +153,7 @@ function getPlayers() {
 
   parseGet("players", null,function(players) {
 
-      var data = [];
+      data = [];
 
       for(var i=0; i < players.length; i++) {
         data.push({id: i, text: players[i].username, objectId: players[i].objectId});
