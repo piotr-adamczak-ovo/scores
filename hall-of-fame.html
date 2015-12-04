@@ -15,14 +15,25 @@
 </head>
 
 <body>
-     <div id="small-logo">
+
+
+     <div id="small-logo">      
       <a href="index.html"><img src="img/scores.png"></a>
     </div>
   <div id="content">
+    <br>
+    <table id="results" CELLPADDING=6 RULES=GROUPS FRAME=BOX> 
+      <THEAD> <TR> <TH>Rank</TH> <TH>Player</TH> <TH>P</TH> <TH>W</TH> <TH>D</TH> <TH>L</TH> <TH>Pts</TH> </TR> </THEAD> 
 
+      <TBODY id="hall-of-fame">
+      </tbody>
+      <TFOOT> <TR> <TH ALIGN=LEFT COLSPAN=7></TH> </TR> </TFOOT>
+    </table>
   </div>
 <script type="text/javascript">
-
+  $(function(){
+    loadHallOfFame();
+  });
 </script>
 </body>
 </html>

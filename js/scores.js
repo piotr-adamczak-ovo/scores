@@ -147,6 +147,24 @@
     }
   }
 
+  function loadHallOfFame() {
+
+      parseGet("players", "order=-wins",function(players) {
+
+          var html;
+
+          for(var i=0; i < players.length; i++) {
+              var position = i+1;
+              var player = players[i];
+              var games = player.wins + player.draws + player.losses;
+              var points = (player.wins * 3) + player.draws;
+              html += "<tr><td>#"+position+"</td><td>"+player.username+"</td><td>"+games+"</td><td>"+player.wins+"</td><td>"+player.draws+"</td><td>"+player.losses+"</td><td>"+points+"</td></tr>";
+          }
+         $('#hall-of-fame').html(html);
+      });
+
+  }
+
   $('#ghsubmitbtn').on('click', function(e){
     e.preventDefault();
     $('#ghapidata').html('<div id="loader"><img src="css/loader.gif" alt="loading..."></div>');
