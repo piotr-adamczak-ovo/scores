@@ -29,13 +29,21 @@
           <div class="player_title">Player one</div>
           <span id="first_player" class="player_list"></span>
           </select>    
-          <input type="number" class="score" id="player_one_score" name="player_one_score" min="1" max="150">
+          <input type="number" class="score" id="player_one_score" name="player_one_score" value=0 min="0" max="150">
+          <div class="signs">
+            <button class="sign" id="player_one_minus">-</button>
+            <button class="sign" id="player_one_plus">+</button>
+          </div>
         </div>
         <div class="vs"><br></div>
         <div class="player_box">
           <div class="player_title">Player Two</div>
           <span id="second_player" class="player_list"></span> 
-          <input type="number" class="score" id="player_two_score" name="player_two_score" min="1" max="150">
+          <input type="number" class="score" id="player_two_score" name="player_two_score" value=0  min="0" max="150">
+          <div class="signs">
+            <button class="sign" id="player_two_minus">-</button>
+            <button class="sign" id="player_two_plus">+</button>
+          </div>
         </div>
       </div> 
 
@@ -47,6 +55,32 @@
 <script type="text/javascript">
   $(function(){
     setupPlayers();
+
+    $('#player_one_minus').on('click', function(e){
+        e.preventDefault();
+        score = parseInt($('#player_one_score').val(),10);
+        if (score == 0) return;
+        $('#player_one_score').val(score - 1);
+    });
+
+    $('#player_one_plus').on('click', function(e){
+        e.preventDefault();
+        score = parseInt($('#player_one_score').val(),10);
+        $('#player_one_score').val(score + 1);
+    });
+
+    $('#player_two_minus').on('click', function(e){
+        e.preventDefault();
+        score = parseInt($('#player_two_score').val(),10);
+        if (score == 0) return;
+        $('#player_two_score').val(score - 1);
+    });
+
+    $('#player_two_plus').on('click', function(e){
+        e.preventDefault();
+        score = parseInt($('#player_two_score').val(),10);
+        $('#player_two_score').val(score + 1);
+    });
   });
 </script>
 </body>

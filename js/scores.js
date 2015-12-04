@@ -84,6 +84,10 @@
           incrementValueForUserId(firstUserId,"losses");
           incrementValueForUserId(secondUserId,"wins");
         }
+
+        saveGame(function(result) {
+           console.log(result);
+        });
     }
   }
 
@@ -176,6 +180,10 @@ function incrementValueForUserId(userId, param) {
   parsePut("players/"+userId, '{"'+param+'":{"__op":"Increment","amount":1}}', function(players) {
       console.log(players);
   });
+}
+
+function saveGame(callback) {
+    parsePost("games", '{"player_one":"'+firstUsername+'","player_two":"'+secondUsername+'", "score_one":'+firstScore+',"score_two":'+secondScore+'}', callback);
 }
 
 function parseGet(url, params, callback) {

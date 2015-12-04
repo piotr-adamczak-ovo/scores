@@ -93,6 +93,15 @@ a:hover {
     margin-left: 23px;
 }
 
+.signs {
+    width: 100%;
+    height: 40px;
+}
+
+.sign {
+    width: 50%;
+    height: 40px;
+}
 
 .player_title {
     text-align: center;
