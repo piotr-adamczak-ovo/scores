@@ -1,22 +1,5 @@
 @import url('http://fonts.googleapis.com/css?family=Oldenburg');
 
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-  outline: none;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-html { overflow-y: scroll; }
-
 body {
   background: #fafafa; 
   font-family: 'Lato', sans-serif;
@@ -34,7 +17,7 @@ body {
 }
 
 #small-logo { 
-  width: 50px;
+  width: 150px;
   margin: 0 auto;
   text-align: center;
 }
@@ -58,6 +41,7 @@ body {
     text-decoration: none;
     font-weight: bold; 
     text-transform: uppercase;
+    margin-left: -20px;
 }
 
 a { 
@@ -70,11 +54,90 @@ a:hover {
 #content {
     width:400px;
     margin:0 auto;
-
-
+    text-align: center;
+    display: inline;
 }
 
-br { display: block; line-height: 1.6em; } 
+/* Start game */
+
+#outer {
+  position: relative;
+}
+
+#players {
+    min-height: 210px;
+    white-space: nowrap;
+    margin: auto;  
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.player_box {
+    background-image:url('../img/player_box.png');
+    background-size:     cover;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center;  
+    width: 322px;
+    height: 206px;
+    display:inline-table;
+}
+
+.score {
+    border: 0;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    width: 270px;
+    margin-top: 30px;
+    margin-left: 23px;
+}
+
+
+.player_title {
+    text-align: center;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    font-weight: bold; 
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #000;
+}
+
+.player_list {
+    width: 280px;
+    position: relative;
+    margin-top: 29px;
+    margin-left: 0px;
+    display: block;
+}
+
+.vs {
+     background-image:url('../img/vs.png');
+    background-size:     50%;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center;  
+    height: 206px;
+    min-width: 200px;
+    display:inline-block;
+}
+
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+  }
+  .custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+  }
+  .custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+  }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
 ol, ul { list-style: none; }

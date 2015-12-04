@@ -4,6 +4,23 @@
 
   //3fylp3uAd1wEzLRFcli2X1lo2iizN5LX7nwRJZaz
 
+
+  var firstPlayer;
+  var secondPlayer;
+
+  var firstUsername;
+  var secondUsername;
+    
+  var firstScore;
+  var secondScore;
+
+  var firstUserId;
+  var secondUserId;
+
+  var alreadySend = false;
+
+  $(function(){
+
   $('#startgame').on('click', function(e){
     e.preventDefault();
   
@@ -11,6 +28,63 @@
      getPlayers();
 
   });
+
+  $('#savegame').on('click', function(e){
+    e.preventDefault();
+
+      alreadySend = false;
+
+      firstUsername = $('#first_player-ddi').val();
+      secondUsername = $('#second_player-ddi').val();
+
+      firstScore = parseInt($('#player_one_score').val(),10);
+      secondScore = parseInt($('#player_two_score').val(),10);
+
+      getPlayerWithUsername(firstUsername, function(result) {
+
+          if (result.length == 0) {
+              createPlayer(firstUsername,function(newUser) {
+                  firstUserId = result[0].objectId;
+                  updateScores();
+              });
+          } else {
+              firstUserId = result[0].objectId;
+              updateScores();
+          }
+      });
+      
+      getPlayerWithUsername(secondUsername, function(result) {
+          if (result.length == 0) {
+              createPlayer(secondUsername,function(newUser) {
+                  secondUserId = result[0].objectId;
+                  updateScores();
+              });
+          } else {
+              secondUserId = result[0].objectId;
+              updateScores();
+          }
+      });
+    });
+  });
+
+  function updateScores() {
+
+    if (firstUserId && secondUserId && !alreadySend) {
+
+        alreadySend = true;
+
+        if (firstScore == secondScore) {
+          incrementValueForUserId(firstUserId,"draws");
+          incrementValueForUserId(secondUserId,"draws");
+        } else if (firstScore > secondScore) {
+          incrementValueForUserId(firstUserId,"wins");
+          incrementValueForUserId(secondUserId,"losses");
+        } else {
+          incrementValueForUserId(firstUserId,"losses");
+          incrementValueForUserId(secondUserId,"wins");
+        }
+    }
+  }
 
   $('#ghsubmitbtn').on('click', function(e){
     e.preventDefault();
@@ -65,62 +139,75 @@
   }); // end click event handler
   
 
+function setupPlayers() {
+    firstPlayer = new STComboBox();
+    secondPlayer = new STComboBox();
+
+    firstPlayer.Init('first_player');
+    secondPlayer.Init('second_player');
+    getPlayers();
+}
+
 function getPlayers() {
 
-  parseGet("players", function(players) {
+  parseGet("players", null,function(players) {
 
-      var html;
+      var data = [];
 
-      players.forEach(function(player) {
-        html = html + '<option value="'+player.objectId+'"">'+player.username+'</option>';
-      });
+      for(var i=0; i < players.length; i++) {
+        data.push({id: i, text: players[i].username, objectId: players[i].objectId});
+      }
 
-      $('#left_players').html(html);
-      $('#right_players').html(html);
+     firstPlayer.populateList(data);
+     secondPlayer.populateList(data);
   });
 }
 
-function updatePlayers() {
-    parseUpdate("players", "u0ltTbRMWT", function(success) {
-        console.log("Executing callback");
-    });
+function createPlayer(nick, callback) {
+  parsePost("players", '{"username":"'+nick+'","wins":0, "losses":0,"draws":0}', function(players) {
+  });
 }
 
-function parseGet(url, callback) {
+function getPlayerWithUsername(username, callback) {
+  parseGet("players", 'where={"username":"'+username+'"}', callback);
+}
+
+function incrementValueForUserId(userId, param) {
+  parsePut("players/"+userId, '{"'+param+'":{"__op":"Increment","amount":1}}', function(players) {
+      console.log(players);
+  });
+}
+
+function parseGet(url, params, callback) {
+  parseRequest("GET",url, params, callback);
+}
+
+function parsePost(url, params, callback) {
+  parseRequest("POST", url, params,callback);
+}
+
+function parsePut(url, params, callback) {
+  parseRequest("PUT", url, params,callback);
+}
+
+function parseRequest(method, url,data, callback) {
       fullUrl = "https://api.parse.com/1/classes/"+url
       $.ajax({
                 contentType:"application/json",
                 dataType:"json",
-                url:fullUrl,         
+                url:fullUrl,    
+                data: data,     
                 processData:false,
                 headers: {
                     "X-Parse-Application-Id": "HCOLmSAQu05uzLqdbKov2BKbH4ZJOhZ0wKmgjm03",
-                    "X-Parse-REST-API-Key": "jmSIOJza3LSjvdv69laBl7AhyzD73ata9XEFWAFX"
+                    "X-Parse-REST-API-Key": "jmSIOJza3LSjvdv69laBl7AhyzD73ata9XEFWAFX",
+                    "Content-Type" : "application/json" ,
                 },
-                type:"GET",
-                error:function(e) { alert('error: '+e);}
+                type:method,
+                error:function(e) { alert('error: '+e);},
             }).done(function(e,status) {
                 callback(e["results"]);
             });
-  }
-
-  function parseUpdate(url, objectId, data, callback) {
-      fullUrl = "https://api.parse.com/1/classes/" + url + "/" + objectId
-      $.ajax({
-          contentType:"application/json",
-          dataType:"json",
-          url:fullUrl,
-          processData: false,
-          headers: {
-              "X-Parse-Application-Id": "HCOLmSAQu05uzLqdbKov2BKbH4ZJOhZ0wKmgjm03",
-              "X-Parse-REST-API-Key": "jmSIOJza3LSjvdv69laBl7AhyzD73ata9XEFWAFX"
-          },
-          type:"PUT",
-          data: JSON.stringify(data),
-          error:function(e) { console.log('error: '+e);}
-      }).done(function(e,status) {
-          callback(e);
-      });
   }
 
  function postJSON(url, params, callback) {

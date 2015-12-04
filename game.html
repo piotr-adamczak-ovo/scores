@@ -11,8 +11,9 @@
   <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" media="all" href="css/stcombobox.css">
   <script type="text/javascript" src="js/scores.js"></script>
-
+  <script type="text/javascript" src="js/stcombobox.js"></script>
 
 </head>
 
@@ -21,23 +22,31 @@
       <a href="index.html"><img src="img/scores.png"></a>
     </div>
   <div id="content">
-    <form>
-      Select existing player:
-      <select id="left_players">Players
-      </select>    
-      <select id="right_players">Players
-      </select>
+
+      <div id="players">
+
+        <div class="player_box">
+          <div class="player_title">Player one</div>
+          <span id="first_player" class="player_list"></span>
+          </select>    
+          <input type="number" class="score" id="player_one_score" name="player_one_score" min="1" max="150">
+        </div>
+        <div class="vs"><br></div>
+        <div class="player_box">
+          <div class="player_title">Player Two</div>
+          <span id="second_player" class="player_list"></span> 
+          <input type="number" class="score" id="player_two_score" name="player_two_score" min="1" max="150">
+        </div>
+      </div> 
+
       <br>
-      OR<br>
-      Create new one
-      <input id="playername"></input>
-      <button id="startgame">Start Game</button>
-    </form>
+
+       <a href="#" id="savegame" class="button" style="margin: 0 auto;">Save Game</a>
   </div>
 
 <script type="text/javascript">
   $(function(){
-    getPlayers();
+    setupPlayers();
   });
 </script>
 </body>
