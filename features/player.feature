@@ -1,7 +1,7 @@
 Selecting player
 Given I have set up a player
 When I am on the player page
-Then I will be able to search 
+Then I will be able to search for a player 
 And I will be able to select the player 
 
 Viewing player
