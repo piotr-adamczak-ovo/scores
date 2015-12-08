@@ -1,5 +1,5 @@
 use Rack::Static,
     :urls => ["/img", "/js", "/css"],
-    :root => "public"
+    :root => "public",
     :index => 'index.html'
 run Rack::File.new("public")
