@@ -38,6 +38,17 @@
           firstUsername = $('#first_player-ddi').val();
           secondUsername = $('#second_player-ddi').val();
 
+          if (firstUsername == "" && secondUsername == "") {
+             alert("Enter players!")
+             return;
+          } else if (firstUsername == "") {
+             alert("Enter first player!")
+             return;
+          } else if (secondUsername == "") {
+             alert("Enter second player!")
+             return;
+          }
+
           firstScore = parseInt($('#player_one_score').val(), 10);
           secondScore = parseInt($('#player_two_score').val(), 10);
 
@@ -64,7 +75,7 @@
               updateScores();
           }
 
-          postResultOnSlack(firstUsername, secondUsername, firstScore, secondScore);
+          //postResultOnSlack(firstUsername, secondUsername, firstScore, secondScore);
 
           clearScoreBoard();
       });
@@ -147,28 +158,35 @@
 
         if (firstScore == secondScore) {
 
-          incrementValueForUserId(firstUserId,"draws");
-          incrementValueForUserId(secondUserId,"draws");
+          incrementValueForUserId(firstUserId,"draws",function(callback) {
+              incrementValueForUserId(secondUserId,"draws",function(second_callback) {
+                  redirect();
+              });
+          });
+
         } else if (firstScore > secondScore) {
 
-          incrementValueForUserId(firstUserId,"wins");
-          incrementValueForUserId(secondUserId,"losses");
+          incrementValueForUserId(firstUserId,"wins",function(callback) {
+              incrementValueForUserId(secondUserId,"losses",function(second_callback) {
+                  redirect();
+              });
+          });
+          
         } else {
-
-          incrementValueForUserId(firstUserId,"losses");
-          incrementValueForUserId(secondUserId,"wins");
+          incrementValueForUserId(firstUserId,"losses",function(callback) {
+              incrementValueForUserId(secondUserId,"wins",function(second_callback) {
+                  redirect();
+              });
+          });
         }
-
-        saveGame(function(result) {
-           console.log(result);
-        });
-
-        setTimeout(function () {
-             window.location.href = "hall-of-fame.html"; //will redirect to your blog page (an ex: blog.html)
-          }, 500); //will call the function after 2 secs.
-
-
     }
+  }
+
+  function redirect() {
+      saveGame(function(result) {
+           setTimeout(function () { window.location.href = "hall-of-fame.html"; }, 100); 
+           console.log(result);
+      });
   }
 
   function loadHallOfFame() {
@@ -274,10 +292,8 @@ function getPlayerWithUsername(username, callback) {
   parseGet("players", 'where={"username":"'+username+'"}', callback);
 }
 
-function incrementValueForUserId(userId, param) {
-  parsePut("players/"+userId, '{"'+param+'":{"__op":"Increment","amount":1}}', function(players) {
-      //console.log(players);
-  });
+function incrementValueForUserId(userId, param, callback) {
+  parsePut("players/"+userId, '{"'+param+'":{"__op":"Increment","amount":1}}', callback);
 }
 
 function saveGame(callback) {
