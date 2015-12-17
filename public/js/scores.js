@@ -75,7 +75,7 @@
               updateScores();
           }
 
-          //postResultOnSlack(firstUsername, secondUsername, firstScore, secondScore);
+          postResultOnSlack(firstUsername, secondUsername, firstScore, secondScore);
 
           clearScoreBoard();
       });
